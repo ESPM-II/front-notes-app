@@ -18,6 +18,8 @@ const SignUp = () => {
     snackbarSeverity,
     openSnackbar,
     setOpenSnackbar,
+    setSnackbarMessage,
+    setSnackbarSeverity,
   } = useAuth();
 
   const router = useRouter();
@@ -25,21 +27,28 @@ const SignUp = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validación de contraseñas
     if (password !== confirmPassword) {
+      setSnackbarMessage("Las contraseñas no coinciden.");
+      setSnackbarSeverity("error");
       setOpenSnackbar(true);
       return;
     }
 
     try {
-      const response = await handleSignUp(username, email, password);
+      const response = await handleSignUp(username, email, password, confirmPassword);
 
       if (response && response.success) {
+        setSnackbarMessage("Cuenta creada exitosamente.");
+        setSnackbarSeverity("success");
         setOpenSnackbar(true);
         setTimeout(() => {
           router.push("/login");
         }, 2000);
       }
     } catch (error) {
+      setSnackbarMessage("Ocurrió un error al crear la cuenta.");
+      setSnackbarSeverity("error");
       setOpenSnackbar(true);
     }
   };

@@ -63,9 +63,21 @@ const useAuth = () => {
   const handleSignUp = async (
     username: string,
     email: string,
-    password: string
+    password: string,
+    confirmPassword: string
   ) => {
+    // Verificar si las contraseñas coinciden
+    if (password !== confirmPassword) {
+      setSnackbarMessage("Las contraseñas no coinciden.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+      return { success: false, detail: "Las contraseñas no coinciden." };
+    }
+
     if (!username || !email || !password) {
+      setSnackbarMessage("Todos los campos son obligatorios.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
       return { success: false, detail: "Todos los campos son obligatorios." };
     }
 
@@ -108,6 +120,8 @@ const useAuth = () => {
     setSuccessMessage,
     snackbarMessage,
     snackbarSeverity,
+    setSnackbarMessage,     
+    setSnackbarSeverity, 
   };
 };
 
