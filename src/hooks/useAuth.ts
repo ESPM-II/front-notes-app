@@ -20,7 +20,7 @@ const useAuth = () => {
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
-  ); // Controlando el severity de la respuesta para mostrar en snackbar
+  );
   const router = useRouter();
 
   // Función para iniciar sesión

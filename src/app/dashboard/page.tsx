@@ -11,6 +11,7 @@ import {
   CardContent,
   CardActions,
   Button,
+  Alert,
 } from "@mui/material";
 import useNotes from "@/hooks/useNotes";
 import NoteModal from "@/components/NoteModal";
@@ -24,12 +25,20 @@ interface Note {
 }
 
 const Dashboard = () => {
-  const { notes, fetchNotes, loading, error, deleteNote, updateNote } =
-    useNotes();
+  const {
+    notes,
+    fetchNotes,
+    loading,
+    deleteNote,
+    updateNote,
+    snackbarMessage,
+    snackbarSeverity,
+    openSnackbar,
+    setOpenSnackbar,
+  } = useNotes();
+
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [openModal, setOpenModal] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isClient, setIsClient] = useState(false); // Estado para evitar problemas con la hidratación
 
   useEffect(() => {
@@ -54,8 +63,6 @@ const Dashboard = () => {
 
   const handleDelete = async (id: number) => {
     await deleteNote(id);
-    setSnackbarMessage("Nota eliminada correctamente.");
-    setOpenSnackbar(true);
   };
 
   const handleEdit = (id: number) => {
@@ -77,13 +84,11 @@ const Dashboard = () => {
 
       {loading ? (
         <CircularProgress />
-      ) : error ? (
-        <Typography color="error">Error al cargar las notas</Typography>
       ) : (
         <Box
           display="grid"
           gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-          gap={2} // Espacio entre tarjetas
+          gap={2}
         >
           {notes.map((note: Note) => (
             <Card
@@ -137,8 +142,16 @@ const Dashboard = () => {
         open={openSnackbar}
         autoHideDuration={3000}
         onClose={() => setOpenSnackbar(false)}
-        message={snackbarMessage}
-      />
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
