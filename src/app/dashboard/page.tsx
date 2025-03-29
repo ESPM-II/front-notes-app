@@ -13,22 +13,17 @@ import {
   Button,
   Alert,
 } from "@mui/material";
-import useNotes from "@/hooks/useNotes";
+import useNotes, { Note } from "@/hooks/useNotes";
 import NoteModal from "@/components/NoteModal";
+import AddNotePanel from "@/components/AddNotePanel";
 
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  user_id: number;
-  version: number;
-}
 
 const Dashboard = () => {
   const {
     notes,
     fetchNotes,
     loading,
+    createNote,
     deleteNote,
     updateNote,
     snackbarMessage,
@@ -39,7 +34,7 @@ const Dashboard = () => {
 
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [openModal, setOpenModal] = useState(false);
-  const [isClient, setIsClient] = useState(false); // Estado para evitar problemas con la hidratación
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -131,12 +126,9 @@ const Dashboard = () => {
         </Box>
       )}
 
-      <NoteModal
-        open={openModal}
-        onClose={handleCloseModal}
-        note={selectedNote}
-        onUpdate={updateNote}
-      />
+      <NoteModal open={openModal} onClose={handleCloseModal} note={selectedNote} onUpdate={updateNote} />
+
+      <AddNotePanel onCreateNote={createNote} />
 
       <Snackbar
         open={openSnackbar}

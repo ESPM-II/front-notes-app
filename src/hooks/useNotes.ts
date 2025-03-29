@@ -3,15 +3,13 @@ import axios from "axios";
 
 const errorMessages: Record<string, string> = {
   "Note not found": "Error: Nota no encontrada.",
-  "You cannot edit this note":
-    "Error: No tienes permiso para editar esta nota.",
-  "The note has been previously modified":
-    "Error: La nota fue modificada previamente. Recarga la página.",
+  "You cannot edit this note": "Error: No tienes permiso para editar esta nota.",
+  "The note has been previously modified": "Error: La nota fue modificada previamente. Recarga la página.",
   "Network Error": "Error de red. Verifica tu conexión a internet.",
   default: "Hubo un error. Por favor, intenta de nuevo.",
 };
 
-interface Note {
+export interface Note {
   id: number;
   title: string;
   content: string;
@@ -23,14 +21,10 @@ const useNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
-    "success"
-  );
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
-  // Función para manejar la apertura del Snackbar
   const showSnackbar = (message: string, severity: "success" | "error") => {
-    console.log("Mostrando Snackbar:", message, severity);
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setOpenSnackbar(true);
@@ -52,6 +46,22 @@ const useNotes = () => {
     }
   };
 
+  // Crear una nota
+  const createNote = async (title: string, content: string) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        "http://localhost:8000/api/notes",
+        { title, content },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNotes((prevNotes) => [...prevNotes, response.data]);
+      showSnackbar("Nota creada correctamente.", "success");
+    } catch (err: any) {
+      showSnackbar("Error al crear la nota.", "error");
+    }
+  };
+
   // Eliminar una nota
   const deleteNote = async (id: number) => {
     try {
@@ -66,7 +76,7 @@ const useNotes = () => {
     }
   };
 
-  // Actualizar una nota
+  // Updatear una nota
   const updateNote = async (id: number, title: string, content: string) => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -81,18 +91,13 @@ const useNotes = () => {
 
       setNotes(
         notes.map((note) =>
-          note.id === id
-            ? { ...note, title, content, version: response.data.version }
-            : note
+          note.id === id ? { ...note, title, content, version: response.data.version } : note
         )
       );
       showSnackbar("Nota actualizada correctamente.", "success");
     } catch (err: any) {
       const errorDetail = err.response?.data?.detail || "default";
-      showSnackbar(
-        errorMessages[errorDetail] || errorMessages["default"],
-        "error"
-      );
+      showSnackbar(errorMessages[errorDetail] || errorMessages["default"], "error");
     }
   };
 
@@ -100,6 +105,7 @@ const useNotes = () => {
     notes,
     fetchNotes,
     loading,
+    createNote,
     deleteNote,
     updateNote,
     snackbarMessage,
