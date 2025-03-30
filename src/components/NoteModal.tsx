@@ -1,13 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Box, Typography, TextField, Button } from "@mui/material";
-
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  user_id: number;
-  version: number;
-}
+import { Note } from "@/hooks/useNotes";
 
 interface NoteModalProps {
   open: boolean;
@@ -16,13 +9,26 @@ interface NoteModalProps {
   onUpdate: (id: number, title: string, content: string) => void;
 }
 
-const NoteModal = ({ open, onClose, note, onUpdate }: NoteModalProps) => {
-  const [editedTitle, setEditedTitle] = useState(note?.title || "");
-  const [editedContent, setEditedContent] = useState(note?.content || "");
+const NoteModal: React.FC<NoteModalProps> = ({
+  open,
+  onClose,
+  note,
+  onUpdate,
+}) => {
+  const [editedTitle, setEditedTitle] = useState<string>("");
+  const [editedContent, setEditedContent] = useState<string>("");
+
+  useEffect(() => {
+    setEditedTitle("");
+    setEditedContent("");
+  }, [note]);
 
   const handleSave = () => {
     if (note) {
-      onUpdate(note.id, editedTitle, editedContent);
+      const titleToSave = editedTitle.trim() === "" ? note.title : editedTitle;
+      const contentToSave =
+        editedContent.trim() === "" ? note.content : editedContent;
+      onUpdate(note.id, titleToSave, contentToSave);
       onClose();
     }
   };
@@ -35,7 +41,7 @@ const NoteModal = ({ open, onClose, note, onUpdate }: NoteModalProps) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: { xs: "90%", md: 400 },
           bgcolor: "white",
           boxShadow: 24,
           p: 3,
@@ -48,6 +54,7 @@ const NoteModal = ({ open, onClose, note, onUpdate }: NoteModalProps) => {
         <TextField
           fullWidth
           label="Título"
+          placeholder={note?.title}
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
           margin="normal"
@@ -55,6 +62,7 @@ const NoteModal = ({ open, onClose, note, onUpdate }: NoteModalProps) => {
         <TextField
           fullWidth
           label="Contenido"
+          placeholder={note?.content}
           value={editedContent}
           onChange={(e) => setEditedContent(e.target.value)}
           margin="normal"
