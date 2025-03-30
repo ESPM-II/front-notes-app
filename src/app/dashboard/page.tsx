@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import useNotes, { Note } from "@/hooks/useNotes";
 import NoteModal from "@/components/NoteModal";
+import NoteViewModal from "@/components/NoteViewModal";
 import AddNotePanel from "@/components/AddNotePanel";
-
 
 const Dashboard = () => {
   const {
@@ -33,7 +33,8 @@ const Dashboard = () => {
   } = useNotes();
 
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -46,13 +47,23 @@ const Dashboard = () => {
     }
   }, [isClient]);
 
-  const handleOpenModal = (note: Note) => {
+  const handleOpenEditModal = (note: Note) => {
     setSelectedNote(note);
-    setOpenModal(true);
+    setOpenEditModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+    setSelectedNote(null);
+  };
+
+  const handleOpenViewModal = (note: Note) => {
+    setSelectedNote(note);
+    setOpenViewModal(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setOpenViewModal(false);
     setSelectedNote(null);
   };
 
@@ -63,7 +74,7 @@ const Dashboard = () => {
   const handleEdit = (id: number) => {
     const noteToEdit = notes.find((note) => note.id === id);
     if (noteToEdit) {
-      handleOpenModal(noteToEdit);
+      handleOpenEditModal(noteToEdit);
     }
   };
 
@@ -88,6 +99,7 @@ const Dashboard = () => {
           {notes.map((note: Note) => (
             <Card
               key={note.id}
+              onClick={() => handleOpenViewModal(note)}
               sx={{
                 transition: "transform 0.3s ease-in-out",
                 "&:hover": {
@@ -97,6 +109,7 @@ const Dashboard = () => {
                 boxShadow: 3,
                 borderRadius: "12px",
                 overflow: "hidden",
+                cursor: "pointer",
               }}
             >
               <CardContent>
@@ -109,14 +122,20 @@ const Dashboard = () => {
                 <Button
                   size="small"
                   color="primary"
-                  onClick={() => handleEdit(note.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(note.id);
+                  }}
                 >
                   Editar
                 </Button>
                 <Button
                   size="small"
                   color="secondary"
-                  onClick={() => handleDelete(note.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(note.id);
+                  }}
                 >
                   Eliminar
                 </Button>
@@ -126,7 +145,18 @@ const Dashboard = () => {
         </Box>
       )}
 
-      <NoteModal open={openModal} onClose={handleCloseModal} note={selectedNote} onUpdate={updateNote} />
+      <NoteModal
+        open={openEditModal}
+        onClose={handleCloseEditModal}
+        note={selectedNote}
+        onUpdate={updateNote}
+      />
+
+      <NoteViewModal
+        open={openViewModal}
+        onClose={handleCloseViewModal}
+        note={selectedNote}
+      />
 
       <AddNotePanel onCreateNote={createNote} />
 
