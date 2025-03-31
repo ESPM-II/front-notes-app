@@ -120,7 +120,7 @@ const SignUp = () => {
 
         <Typography mt={2} align="center">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/login" style={{ textDecoration: "underline" }}>
+          <a href="/" style={{ textDecoration: "underline" }}>
             Inicia sesión aquí
           </a>
         </Typography>

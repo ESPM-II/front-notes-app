@@ -49,7 +49,7 @@ const useNotes = () => {
     } catch (err: any) {
       if (err.response?.status === 401) {
         showSnackbar(errorMessages["Unauthorized"], "error");
-        router.push("/login");
+        router.push("/");
       } else {
         showSnackbar(errorMessages["default"], "error");
       }
@@ -72,7 +72,7 @@ const useNotes = () => {
     } catch (err: any) {
       if (err.response?.status === 401) {
         showSnackbar(errorMessages["Unauthorized"], "error");
-        router.push("/login");
+        router.push("/");
       } else {
         showSnackbar("Error al crear la nota.", "error");
       }
@@ -91,7 +91,7 @@ const useNotes = () => {
     } catch (err: any) {
       if (err.response?.status === 401) {
         showSnackbar(errorMessages["Unauthorized"], "error");
-        router.push("/login");
+        router.push("/");
       } else {
         showSnackbar("Error al eliminar la nota.", "error");
       }
@@ -122,7 +122,7 @@ const useNotes = () => {
     } catch (err: any) {
       if (err.response?.status === 401) {
         showSnackbar(errorMessages["Unauthorized"], "error");
-        router.push("/login");
+        router.push("/");
       } else {
         const errorDetail = err.response?.data?.detail || "default";
         showSnackbar(

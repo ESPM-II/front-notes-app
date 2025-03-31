@@ -108,7 +108,7 @@ const useAuth = () => {
     setSnackbarMessage("Sesión cerrada correctamente.");
     setSnackbarSeverity("success");
     setOpenSnackbar(true);
-    router.push("/login");
+    router.push("/");
   };
 
   return {
