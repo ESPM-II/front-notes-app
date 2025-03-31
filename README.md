@@ -1,5 +1,6 @@
-Descripción
-Este es un proyecto basado en Next que proporciona una plataforma frontend para interactuar con la base de datos del backend y ejecutar la lógica necesaria para el manejo de notas. Este proyecto utiliza React para la interfaz de usuario.
+Descripción.
+
+Este es un proyecto basado en Next que proporciona una plataforma frontend para interactuar con la base de datos del backend y ejecutar la lógica necesaria para la creación/manejo de notas, implementando medidas de seguridad para el acceso seguro de los usuarios y gestión/control segura de sus datos. Este proyecto utiliza React para la interfaz de usuario.
 
 Requerimientos:
 
