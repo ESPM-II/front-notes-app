@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"; // Importamos el ícono de agregar
-import BaseForm from "./BaseForm"; // Asegúrate de que la ruta es correcta
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"; 
+import BaseForm from "./BaseForm"; 
 
 interface AddNotePanelProps {
   onCreateNote: (title: string, content: string) => void;
