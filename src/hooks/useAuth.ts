@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 import { useRouter } from "next/navigation";
 
 // Objeto para definir las respuestas que mostraré al cliente según la respuesta del servidor
@@ -33,13 +33,10 @@ const useAuth = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axiosInstance.post("/auth/login", {
+        username,
+        password,
+      });
 
       if (response.data?.access_token) {
         localStorage.setItem("jwtToken", response.data.access_token);
@@ -66,7 +63,6 @@ const useAuth = () => {
     password: string,
     confirmPassword: string
   ) => {
-    // Verificar si las contraseñas coinciden
     if (password !== confirmPassword) {
       setSnackbarMessage("Las contraseñas no coinciden.");
       setSnackbarSeverity("error");
@@ -82,14 +78,11 @@ const useAuth = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/user/register",
-        {
-          username,
-          email,
-          password,
-        }
-      );
+      const response = await axiosInstance.post("/user/register", {
+        username,
+        email,
+        password,
+      });
 
       if (response.status === 201) {
         setSnackbarMessage(
@@ -109,9 +102,19 @@ const useAuth = () => {
     }
   };
 
+  // Función para cerrar sesión
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    setSnackbarMessage("Sesión cerrada correctamente.");
+    setSnackbarSeverity("success");
+    setOpenSnackbar(true);
+    router.push("/login");
+  };
+
   return {
     handleLogin,
     handleSignUp,
+    handleLogout,
     error,
     successMessage,
     openSnackbar,
@@ -120,8 +123,8 @@ const useAuth = () => {
     setSuccessMessage,
     snackbarMessage,
     snackbarSeverity,
-    setSnackbarMessage,     
-    setSnackbarSeverity, 
+    setSnackbarMessage,
+    setSnackbarSeverity,
   };
 };
 

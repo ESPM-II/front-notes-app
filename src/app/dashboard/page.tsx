@@ -17,6 +17,7 @@ import useNotes, { Note } from "@/hooks/useNotes";
 import NoteModal from "@/components/NoteModal";
 import NoteViewModal from "@/components/NoteViewModal";
 import AddNotePanel from "@/components/AddNotePanel";
+import Navbar from "@/components/Navbar";
 
 const Dashboard = () => {
   const {
@@ -83,7 +84,10 @@ const Dashboard = () => {
   }
 
   return (
+    <>
+    <Navbar/>
     <Container maxWidth="lg" sx={{ mt: 5 }}>
+      
       <Typography variant="h4" align="center" mb={3}>
         Mis Notas
       </Typography>
@@ -175,6 +179,7 @@ const Dashboard = () => {
         </Alert>
       </Snackbar>
     </Container>
+    </>
   );
 };
 
