@@ -1,4 +1,4 @@
-"use client";
+'use client'; 
 
 import { useEffect, useState } from "react";
 import {
@@ -9,10 +9,11 @@ import {
   Box,
   Card,
   CardContent,
-  CardActions,
-  Button,
+  IconButton,
   Alert,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import useNotes, { Note } from "@/hooks/useNotes";
 import NoteModal from "@/components/NoteModal";
 import NoteViewModal from "@/components/NoteViewModal";
@@ -85,100 +86,107 @@ const Dashboard = () => {
 
   return (
     <>
-    <Navbar/>
-    <Container maxWidth="lg" sx={{ mt: 5 }}>
-      
-      <Typography variant="h4" align="center" mb={3}>
-        Mis Notas
-      </Typography>
+      <Navbar/>
+      <Container maxWidth="lg" sx={{ mt: 5 }}>
+        
+        <Typography variant="h4" align="center" mb={3}>
+          Mis Notas
+        </Typography>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Box
-          display="grid"
-          gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-          gap={2}
-        >
-          {notes.map((note: Note) => (
-            <Card
-              key={note.id}
-              onClick={() => handleOpenViewModal(note)}
-              sx={{
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                  boxShadow: 6,
-                },
-                boxShadow: 3,
-                borderRadius: "12px",
-                overflow: "hidden",
-                cursor: "pointer",
-              }}
-            >
-              <CardContent>
-                <Typography variant="h6">{note.title}</Typography>
-                <Typography variant="body2" color="textSecondary" noWrap>
-                  {note.content}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEdit(note.id);
-                  }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  size="small"
-                  color="secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(note.id);
-                  }}
-                >
-                  Eliminar
-                </Button>
-              </CardActions>
-            </Card>
-          ))}
-        </Box>
-      )}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+            gap={3}
+          >
+            {notes.map((note: Note) => (
+              <Card
+                key={note.id}
+                onClick={() => handleOpenViewModal(note)}
+                sx={{
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: 8,
+                    backgroundColor: "#f5f5f5", 
+                  },
+                  boxShadow: 4,
+                  borderRadius: "16px", 
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  backgroundColor: "#fff", 
+                  marginBottom: "1rem", 
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" fontWeight="bold" sx={{ color: "#333" }}>
+                    {note.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" noWrap sx={{ fontSize: "0.9rem" }}>
+                    {note.content}
+                  </Typography>
+                </CardContent>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEdit(note.id);
+                    }}
+                    sx={{ color: "#6200EE", "&:hover": { color: "#3700B3" } }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(note.id);
+                    }}
+                    sx={{ color: "#f44336", "&:hover": { color: "#d32f2f" } }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </Card>
+            ))}
+          </Box>
+        )}
 
-      <NoteModal
-        open={openEditModal}
-        onClose={handleCloseEditModal}
-        note={selectedNote}
-        onUpdate={updateNote}
-      />
+        <NoteModal
+          open={openEditModal}
+          onClose={handleCloseEditModal}
+          note={selectedNote}
+          onUpdate={updateNote}
+        />
 
-      <NoteViewModal
-        open={openViewModal}
-        onClose={handleCloseViewModal}
-        note={selectedNote}
-      />
+        <NoteViewModal
+          open={openViewModal}
+          onClose={handleCloseViewModal}
+          note={selectedNote}
+        />
 
-      <AddNotePanel onCreateNote={createNote} />
+        <AddNotePanel onCreateNote={createNote} />
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
           onClose={() => setOpenSnackbar(false)}
-          severity={snackbarSeverity}
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Container>
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={snackbarSeverity}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Container>
     </>
   );
 };

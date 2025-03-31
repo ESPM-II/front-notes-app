@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"; // Importamos el ícono de agregar
 import BaseForm from "./BaseForm"; // Asegúrate de que la ruta es correcta
 
 interface AddNotePanelProps {
@@ -58,10 +59,15 @@ const AddNotePanel: React.FC<AddNotePanelProps> = ({ onCreateNote }) => {
           right: 20,
           borderRadius: "50%",
           padding: "16px",
-          boxShadow: 3,
+          boxShadow: 4, 
+          backgroundColor: "#6200EE", 
+          "&:hover": {
+            backgroundColor: "#3700B3", 
+            boxShadow: 6,
+          },
         }}
       >
-        +
+        <AddCircleOutlineIcon sx={{ fontSize: "2rem", color: "white" }} />
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)}>
@@ -77,11 +83,6 @@ const AddNotePanel: React.FC<AddNotePanelProps> = ({ onCreateNote }) => {
             snackbarSeverity={snackbarSeverity}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} color="secondary">
-            Cancelar
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );
